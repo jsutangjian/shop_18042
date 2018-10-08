@@ -17,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import static com.alipay.api.AlipayConstants.CHARSET;
-
 @Controller
 @RequestMapping("/pay")
 public class PayController {
@@ -36,7 +34,6 @@ public class PayController {
 
     @RequestMapping("/topay")
     public void pay(String orderid,HttpServletResponse httpResponse){
-        
         Order order = orderService.queryOrderById(orderid);
         AlipayClient alipayClient = new DefaultAlipayClient(
                 //沙箱的地址
@@ -55,8 +52,9 @@ public class PayController {
         //设置异步响应的url
 
         alipayRequest.setNotifyUrl("http://www.baidu.com");//在公共参数中设置回跳和通知地址
+        //此处添加的时候是添加订单的id(orderid),而不是id
         alipayRequest.setBizContent("{" +
-                "    \"out_trade_no\":\""+order.getId()+"\"," +
+                "    \"out_trade_no\":\""+order.getOrderid()+"\"," +
                 "    \"product_code\":\"FAST_INSTANT_TRADE_PAY\"," +
                 "    \"total_amount\":"+order.getOprice()+"," +
                 "    \"subject\":\""+order.getOrderid()+"\"," +
@@ -81,10 +79,9 @@ public class PayController {
             e.printStackTrace();
         }
     }
-
+    //支付宝查询订单的方法
     @RequestMapping("/isok")
     public String isok(String orderid){
-        System.out.println("订单号为:"+orderid);
         //支付成功，跳到我的订单页面
         AlipayClient alipayClient = new DefaultAlipayClient(
                 //沙箱的地址
@@ -107,7 +104,6 @@ public class PayController {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        System.out.println("相应为:"+response);
         if(response.isSuccess()){
             String tradeStatus = response.getTradeStatus();
             if("TRADE_SUCCESS".equals(tradeStatus)){//支付成功
