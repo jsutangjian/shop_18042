@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.dao.IOrderMapper">
+    <!--配置的别名在提供者那边配置-->
+    <!--调用的时候，后台工程在调用，要经过controller，service，提供者，最后再由提供者调用dao，
+    在提供者那里起了别名，这里的goods就能识别-->
+    <resultMap id="orderMapper" type="order">
+        <id property="id" column="id"/>
+        <result property="orderid" column="orderid"/>
+        <result property="uid" column="uid"/>
+        <result property="person" column="person"/>
+        <result property="address" column="address"/>
+        <result property="phone" column="phone"/>
+        <result property="code" column="code"/>
+        <result property="oprice" column="oprice"/>
+        <result property="status" column="status"/>
+        <result property="ordertime" column="ordertime"/>
+
+        <collection property="ods" ofType="orderDetail">
+            <id property="id" column="odid"/>
+            <result property="oid" column="oid"/>
+            <result property="gid" column="gid"/>
+            <result property="gname" column="gname"/>
+            <result property="ginfo" column="ginfo"/>
+            <result property="price" column="price"/>
+            <result property="gcount" column="gcount"/>
+            <result property="gimage" column="gimage"/>
+        </collection>
+
+    </resultMap>
+
+    <insert id="addOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into orders value(null,#{orderid},#{uid},#{person},#{address},#{phone},
+        #{code},#{oprice},#{status},#{ordertime})
+    </insert>
+
+    <insert id="addOrderDetail">
+        insert into orderdetils values
+        <foreach collection="orderDetailList" item="ordered" separator="," >
+            (null,#{ordered.oid},#{ordered.gid},#{ordered.gname},#{ordered.ginfo},
+            #{ordered.price},#{ordered.gcount},#{ordered.gimage})
+        </foreach>
+    </insert>
+
+    <!--查询其他附属的信息要用resultMap-->
+    <select id="queryOrderByUid" resultMap="orderMapper">
+        select *,o2.id as detail_id from orders o1 JOIN orderdetils o2
+        on o1.id = o2.oid where o1.uid = #{uid}
+    </select>
+
+    <select id="queryOrderById" resultType="order">
+        SELECT  * from orders where orderid = #{orderid}
+    </select>
+    
+    <update id="updateStatusByOrderId">
+        update  orders set status = #{status} where orderid = #{orderid}
+    </update>
+</mapper>

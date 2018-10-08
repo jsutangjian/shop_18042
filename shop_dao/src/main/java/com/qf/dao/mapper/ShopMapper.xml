@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.dao.IShopMapper">
+    <!--配置的别名在提供者那边配置-->
+    <!--调用的时候，后台工程在调用，要经过controller，service，提供者，最后再由提供者调用dao，
+    在提供者那里起了别名，这里的goods就能识别-->
+    <select id="queryAll" resultType="goods">
+          SELECT  * from goods
+    </select>
+    <!--设置主键回填-->
+    <insert id="addgoods" useGeneratedKeys="true" keyProperty="id" >
+          INSERT  INTO  goods VALUE (null ,#{title},#{ginfo},#{gcount},null,#{allprice},#{price},#{gimage})
+    </insert>
+    <!--查询新品-->
+    <select id="queryNewGoods" resultType="goods">
+        SELECT  * from goods ORDER BY  id DESC  limit 4
+    </select>
+
+    <select id="queryById" resultType="goods">
+        SELECT  * from goods WHERE  id = #{id}
+    </select>
+</mapper>

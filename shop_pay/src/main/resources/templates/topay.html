@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:inline="javascript">
+        window.onload = function(){
+            //访问url，在新的窗口打开
+            var value = [[${orderid}]]
+            alert(value)
+            window.open("http://localhost:8088/pay/topay?orderid="+[[${orderid}]],"_blank");
+        }
+
+        function ok(){
+            location.href="http://localhost:8088/pay/isok?orderid="+[[${orderid}]]
+        }
+    </script>
+</head>
+<body>
+    <h2>正在支付</h2>
+    <button onclick="ok();">支付成功</button>
+    <button>支付遇到问题?</button>
+</body>
+</html>

@@ -1,0 +1,32 @@
+dubbo:
+  application:
+    name: shop_back
+  registry:
+    address: 192.168.140.128
+    port: 2181
+    protocol: zookeeper
+  consumer:
+    check: false
+    timeout: 1500
+spring:
+  thymeleaf:
+    cache: false
+    mode: HTML5
+  servlet:
+    multipart:
+      max-file-size: 5MB
+fdfs:
+  so-timeout: 1000 #读取时间
+  thumb-image:
+    height: 200
+    width: 200
+  pool:
+    jmx-enabled: false
+  tracker-list:
+    - 192.168.140.128:22122
+# 图片上传路径，放在虚拟机下，nginx访问
+image:
+  path: http://192.168.140.128/
+server:
+  port: 8080
+

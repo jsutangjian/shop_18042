@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.dao.IUserMapper">
+    <!--配置的别名在提供者那边配置-->
+    <!--调用的时候，后台工程在调用，要经过controller，service，提供者，最后再由提供者调用dao，
+    在提供者那里起了别名，这里的goods就能识别-->
+    <select id="queryByUserName" resultType="user">
+          SELECT  * from user where username = #{username}
+    </select>
+</mapper>

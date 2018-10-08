@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qf.dao.ICarMapper">
+    <!--配置的别名在提供者那边配置-->
+    <!--调用的时候，后台工程在调用，要经过controller，service，提供者，最后再由提供者调用dao，
+    在提供者那里起了别名，这里的goods就能识别-->
+    <resultMap id="carMapper" type="car">
+        <id property="id" column="id"/>
+        <result property="gnumber" column="gnumber"/>
+        <result property="gid" column="gid"/>
+        <result property="uid" column="uid"/>
+        <association property="goods" javaType="goods">
+            <id property="id" column="id"/>
+            <result property="title" column="title"/>
+            <result property="ginfo" column="ginfo"/>
+            <result property="price" column="price"/>
+            <result property="gimage" column="gimage"/>
+        </association>
+    </resultMap>
+
+
+    <select id="queryAllByUid" resultType="car">
+          SELECT  * from car where uid = #{uid}
+    </select>
+    <!--设置主键回填-->
+    <insert id="addToCar" useGeneratedKeys="true" keyProperty="id" >
+          INSERT  INTO  car VALUE (null ,#{gid},#{gnumber},#{uid})
+    </insert>
+    <!--删除某件商品-->
+    <delete id="deleteById">
+          DELETE  FROM  car WHERE  id = #{id}
+    </delete>
+    <!--删除全部，根据用户id删除-->
+
+    <delete id="deleteAllByUid">
+        DELETE  FROM  car WHERE  uid = #{uid}
+    </delete>
+
+    <select id="queryByGidsAndUid" resultType="car">
+        SELECT  * from car where uid = #{uid} and gid IN
+        <foreach collection="gids" item="gid" separator="," open="(" close=")">
+            #{gid}
+        </foreach>
+    </select>
+
+    <!--这里一定是resultMap,不是resultType-->
+    <select id="queryByCids" resultMap="carMapper">
+        SELECT  * from car c JOIN  goods  g on c.gid = g.id where c.id in
+        <foreach collection="cids" item="cid" separator="," open="(" close=")">
+            #{cid}
+        </foreach>
+    </select>
+
+</mapper>

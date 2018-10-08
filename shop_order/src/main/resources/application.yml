@@ -1,0 +1,16 @@
+server:
+  port: 8087
+dubbo:
+  application:
+    name: shop_back
+  registry:
+    address: 192.168.140.128
+    port: 2181
+    protocol: zookeeper
+  consumer:
+    check: false
+    timeout: 1500
+spring:
+  redis:
+    host: 192.168.140.128
+    password: root
