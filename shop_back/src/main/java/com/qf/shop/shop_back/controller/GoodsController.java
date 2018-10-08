@@ -20,6 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * 对后台工程做了修改
+ */
 @Controller
 @RequestMapping("/goods")
 public class GoodsController {
